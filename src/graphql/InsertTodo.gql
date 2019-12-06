@@ -1,0 +1,9 @@
+mutation ($description: String) {
+  insert_todos(objects: {description: $description, done: false}) {
+    returning {
+      uuid
+      description
+      done
+    }
+  }
+}
