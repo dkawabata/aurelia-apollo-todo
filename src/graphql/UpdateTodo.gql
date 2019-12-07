@@ -1,0 +1,9 @@
+mutation ($uuid: uuid, $done: Boolean) {
+  update_todos(where: {uuid: {_eq: $uuid}}, _set: {done: $done}) {
+    returning {
+      uuid
+      done
+      description
+    }
+  }
+}

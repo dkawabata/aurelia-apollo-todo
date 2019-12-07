@@ -3,6 +3,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import TODOS from './graphql/Todos.gql';
 import INSERT_TODO from './graphql/InsertTodo.gql';
+import UPDATE_TODO from './graphql/UpdateTodo.gql';
 
 const cache = new InMemoryCache();
 const link = new HttpLink({
@@ -41,5 +42,12 @@ export class App {
       });
       this.todoDescription = '';
     }
+  }
+
+  updateTodo(todo) {
+    client.mutate({
+      mutation: UPDATE_TODO,
+      variables: { uuid: todo.uuid, done: todo.done }
+    });
   }
 }
