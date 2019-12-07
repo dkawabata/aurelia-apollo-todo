@@ -1,0 +1,9 @@
+mutation ($uuid: uuid) {
+  delete_todos(where: {uuid: {_eq: $uuid}}) {
+    returning {
+      description
+      done
+      uuid
+    }
+  }
+}

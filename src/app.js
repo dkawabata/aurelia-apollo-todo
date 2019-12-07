@@ -4,6 +4,7 @@ import { HttpLink } from 'apollo-link-http';
 import TODOS from './graphql/Todos.gql';
 import INSERT_TODO from './graphql/InsertTodo.gql';
 import UPDATE_TODO from './graphql/UpdateTodo.gql';
+import REMOVE_TODO from './graphql/RemoveTodo.gql';
 
 const cache = new InMemoryCache();
 const link = new HttpLink({
@@ -48,6 +49,24 @@ export class App {
     client.mutate({
       mutation: UPDATE_TODO,
       variables: { uuid: todo.uuid, done: todo.done }
+    });
+  }
+
+  removeTodo(todo) {
+    client.mutate({
+      mutation: REMOVE_TODO,
+      variables: { uuid: todo.uuid },
+      update: (store, { data }) => {
+        let { todos } = store.readQuery({ query: TODOS });
+        const index = todos.findIndex(t => t.uuid === data.delete_todos.returning[0].uuid);
+        if (index > -1) {
+          todos.splice(index, 1);
+        }
+        store.writeQuery({
+          query: TODOS,
+          data: { 'Todos': todos }
+        });
+      }
     });
   }
 }
